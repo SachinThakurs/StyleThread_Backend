@@ -11,7 +11,7 @@ using static Application.DTO.Auth;
 
 namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Persistence'
 {
-    public class UserService(UserManager<Customer> _userManager, SignInManager<Customer> _signInManager) : IUserService
+    public class UserService(UserManager<Customer> _userManager, SignInManager<Customer> _signInManager) : IUserService 
     {
 
         public async Task<IdentityResult> Register(Customer registerRequest, string password)
