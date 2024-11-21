@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "DDVS3nAad277smUSRlI82hL6l6AIEVS9Kst9PDHp/UE=",
+  "Source": "WebApi",
+  "BasePath": "_content/WebApi",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "WebApi\\wwwroot",
+      "Source": "WebApi",
+      "ContentRoot": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\WebApi\\wwwroot\\",
+      "BasePath": "_content/WebApi",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
