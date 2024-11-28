@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Features.Command.GenericCommands;
+using Application.Features.Service;
 using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
@@ -9,9 +10,11 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using static Application.DTO.Auth;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Application.Features.Handlers.ProductHandler
 {
@@ -19,11 +22,13 @@ namespace Application.Features.Handlers.ProductHandler
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
+        private readonly CloudinaryService _cloudinaryService;
 
-        public CreateProductHandler(IUnitOfWork unitOfWork, IMapper mapper)
+        public CreateProductHandler(IUnitOfWork unitOfWork, IMapper mapper, CloudinaryService cloudinaryService)
         {
             _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
             _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            _cloudinaryService = cloudinaryService;
         }
 
         public async Task<GenericResponse<ProductDto>> Handle(GenericCreateCommand<ProductDto, GenericResponse<ProductDto>> request, CancellationToken cancellationToken)
@@ -40,9 +45,22 @@ namespace Application.Features.Handlers.ProductHandler
                 {
                     if (variant.Image != null && variant.Image.Count > 0)
                     {
-                        var imagePaths = await ProcessImagesAsync(variant.Image, cancellationToken);
-                        // Update the Image property with the new paths
-                        variant.Image = imagePaths; // Assuming Image is List<byte[]>
+                        var uploadedImageUrls = new List<string>();
+
+                        foreach (var image in variant.Image) // Assuming Image is List<byte[]>
+                        {
+                            string fileName = $"{Guid.NewGuid()}.jpg"; // Generate a unique file name
+                            byte[] imageByteArray = Convert.FromBase64String(image);
+                            var imageUrl = await _cloudinaryService.UploadImageAsync(imageByteArray, fileName);
+                            if(imageUrl == null)
+                            {
+                                throw new InvalidOperationException("Error while processing the image.");
+                            }
+                            uploadedImageUrls.Add(imageUrl);
+                        }
+
+                        // Update the Image property with Cloudinary URLs
+                        variant.Image = uploadedImageUrls; // Update your model to store image URLs instead of byte[]
                     }
                 }
 
@@ -68,6 +86,7 @@ namespace Application.Features.Handlers.ProductHandler
                 return CreateErrorResponse("An error occurred while processing your request.", ex.Message);
             }
         }
+
 
         private async Task<List<string>> ProcessImagesAsync(List<string> base64Images, CancellationToken cancellationToken)
         {
