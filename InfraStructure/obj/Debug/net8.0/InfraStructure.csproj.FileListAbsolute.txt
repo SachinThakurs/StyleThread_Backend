@@ -15,3 +15,4 @@ D:\Clothing_Ecommerece\Backend\CleanArchitecture\InfraStructure\obj\Debug\net8.0
 D:\Clothing_Ecommerece\Backend\CleanArchitecture\InfraStructure\obj\Debug\net8.0\refint\InfraStructure.dll
 D:\Clothing_Ecommerece\Backend\CleanArchitecture\InfraStructure\obj\Debug\net8.0\InfraStructure.pdb
 D:\Clothing_Ecommerece\Backend\CleanArchitecture\InfraStructure\obj\Debug\net8.0\ref\InfraStructure.dll
+D:\Clothing_Ecommerece\Backend\CleanArchitecture\InfraStructure\obj\Debug\net8.0\InfraStructure.sourcelink.json

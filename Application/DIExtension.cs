@@ -1,4 +1,6 @@
 ﻿using Application.Behaviors;
+using Application.Features.Service;
+
 //using Application.Features.Handlers.AuthHandler;
 using Application.Interfaces;
 using Domain.Entities;
@@ -18,6 +20,8 @@ namespace Application
             services.AddValidatorsFromAssembly(Assembly.GetExecutingAssembly());
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddTransient<UserManager<Customer>>();
+            services.AddSingleton<CloudinaryService>();
+
         }
     }
 }
