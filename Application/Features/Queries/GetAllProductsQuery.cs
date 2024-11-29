@@ -39,12 +39,6 @@ namespace Application.Features.Queries
                         {
                             foreach (var variant in productDto.ProductVariants)
                             {
-                                // Convert image byte arrays to base64 strings
-                                if (variant.Image != null && variant.Image.Any())
-                                {
-                                    variant.Image = variant.Image.Select(imagePath => ConvertImageToBase64(imagePath)).ToList();
-                                }
-
                                 var variantSizeData = await _unitOfWork.productVariantSize.GetByProductVariantSizeIdAsync(variant.ProductVariantId, cancellationToken);
                                 variant.ProductVariantSizes = _mapper.Map<ICollection<ProductVariantSizeDto>>(variantSizeData) ?? new List<ProductVariantSizeDto>();
                             }

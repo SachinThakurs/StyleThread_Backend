@@ -1,5 +1,6 @@
 ﻿using Application.DTO;
 using Application.Features.Command.GenericCommands;
+using Application.Features.Service;
 using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
@@ -18,23 +19,44 @@ using static Application.DTO.Auth;
 
 namespace Application.Features.Handlers.ProductHandler
 {
-    public class UpdateProductHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GenericUpdateCommand<ProductDto, GenericResponse<string>>, GenericResponse<string>>
+    public class UpdateProductHandler(IUnitOfWork unitOfWork, IMapper mapper, CloudinaryService cloudinaryService) : IRequestHandler<GenericUpdateCommand<ProductDto, GenericResponse<string>>, GenericResponse<string>>
     {
         private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
         private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+        private readonly CloudinaryService _cloudinaryService = cloudinaryService;
 
         public async Task<GenericResponse<string>> Handle(GenericUpdateCommand<ProductDto, GenericResponse<string>> request, CancellationToken cancellationToken)
         {
             if (request?.Entity == null) throw new ArgumentNullException(nameof(request.Entity), "Product data cannot be null.");
             foreach (ProductVariantDto productVarient in request.Entity.ProductVariants)
             {
-                //if (productVarient.UploadImages != null && productVarient.UploadImages.Length > 0)
-                //{
-                //    byte[][] imageBytesList = await ProcessImagesAsync(productVarient.UploadImages, cancellationToken);
-                //    productVarient.Image = productVarient.Image == null
-                //                            ? imageBytesList.ToList()
-                //                            : productVarient.Image.Concat(imageBytesList).ToList();
-                    if (productVarient.Price > 0 && productVarient.Discount >= 0)
+                if (productVarient.Image != null && productVarient.Image.Count > 0)
+                {
+                    var uploadedImageUrls = new List<string>();
+
+                    foreach (var image in productVarient.Image) // Assuming Image is List<byte[]>
+                    {
+                        if (!image.StartsWith("http"))
+                        {
+                            string fileName = $"{Guid.NewGuid()}.jpg"; // Generate a unique file name
+                            byte[] imageByteArray = Convert.FromBase64String(image);
+                            var imageUrl = await _cloudinaryService.UploadImageAsync(imageByteArray, fileName);
+                            if (imageUrl == null)
+                            {
+                                throw new InvalidOperationException("Error while processing the image.");
+                            }
+                            uploadedImageUrls.Add(imageUrl);
+                        }
+                        else
+                        {
+                            uploadedImageUrls.Add(image);
+                        }
+
+                    }
+                    // Update the Image property with Cloudinary URLs
+                    productVarient.Image = uploadedImageUrls; // Update your model to store image URLs instead of byte[]
+                }
+                if (productVarient.Price > 0 && productVarient.Discount >= 0)
                     {
                         // Calculate the discount amount
                         decimal discountAmount = (productVarient.Price * productVarient.Discount) / 100;
