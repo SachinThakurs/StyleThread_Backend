@@ -60,7 +60,7 @@ namespace Presistance.Context
 
             modelBuilder.Entity<ProductVariantSize>()
                 .HasOne(pvs => pvs.Size)
-                .WithMany(s => s.ProductVariantSizes)
+                .WithMany()
                 .HasForeignKey(pvs => pvs.SizeId);
 
             modelBuilder.ApplyConfiguration(new RoleConfiguration());

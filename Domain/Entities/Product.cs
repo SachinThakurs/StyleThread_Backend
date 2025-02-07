@@ -104,8 +104,6 @@ namespace Domain.Entities
     {
         public int SizeId { get; set; }
         public string SizeName { get; set; }
-
-        public virtual ICollection<ProductVariantSize> ProductVariantSizes { get; set; }
     }
     public class ProductVariantSize
     {

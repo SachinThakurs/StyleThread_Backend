@@ -21,7 +21,7 @@ namespace Application
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
             services.AddTransient<UserManager<Customer>>();
             services.AddSingleton<CloudinaryService>();
-
+            services.AddSingleton<IRazorpayService, RazorPayService>();
         }
     }
 }
