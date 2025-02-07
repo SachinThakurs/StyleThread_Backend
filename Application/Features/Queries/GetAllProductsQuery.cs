@@ -3,6 +3,7 @@ using Application.Interfaces.IRepository;
 using AutoMapper;
 using Domain.Entities;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq; // Ensure this namespace is included for Any() extension method
 using System.Threading;
@@ -19,44 +20,13 @@ namespace Application.Features.Queries
 
             public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
             {
-                // Fetch all products
-                var productData = await _unitOfWork.productRepository.GetAllAsync(cancellationToken);
+                // Fetch all products along with their variants and sizes in a single optimized query
+                var productData = await _unitOfWork.productRepository.GetAllWithVariantsAndSizesAsync(cancellationToken);
 
-                // Map products to DTOs
+                // Ensure data is mapped properly
                 var productDtos = _mapper.Map<IEnumerable<ProductDto>>(productData) ?? Enumerable.Empty<ProductDto>();
 
-                // Check if product DTOs are not empty
-                if (productDtos.Any())
-                {
-                    foreach (var productDto in productDtos)
-                    {
-                        // Fetch variants for each product
-                        var variantData = await _unitOfWork.productVariantRepository.GetByProductIdAsync(productDto.ProductId, cancellationToken);
-
-                        // Map product variants to DTOs
-                        productDto.ProductVariants = _mapper.Map<ICollection<ProductVariantDto>>(variantData) ?? new List<ProductVariantDto>();
-                        if (productDto.ProductVariants.Any())
-                        {
-                            foreach (var variant in productDto.ProductVariants)
-                            {
-                                var variantSizeData = await _unitOfWork.productVariantSize.GetByProductVariantSizeIdAsync(variant.ProductVariantId, cancellationToken);
-                                variant.ProductVariantSizes = _mapper.Map<ICollection<ProductVariantSizeDto>>(variantSizeData) ?? new List<ProductVariantSizeDto>();
-                            }
-                        }
-                    }
-                }
-
-                return productDtos; // Return the mapped product DTOs
-            }
-            private string ConvertImageToBase64(string imagePath)
-            {
-                var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", imagePath.TrimStart('/')); // Adjust if needed
-                if (File.Exists(filePath))
-                {
-                    byte[] imageBytes = File.ReadAllBytes(filePath);
-                    return Convert.ToBase64String(imageBytes);
-                }
-                return null; // Or handle the case where the file doesn't exist
+                return productDtos;
             }
         }
     }

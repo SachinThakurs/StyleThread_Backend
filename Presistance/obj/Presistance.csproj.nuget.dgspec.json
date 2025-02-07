@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Presistance\\Presistance.csproj": {}
+    "D:\\Clothing_Ecommerece\\Backend\\Presistance\\Presistance.csproj": {}
   },
   "projects": {
-    "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Application\\Application.csproj": {
+    "D:\\Clothing_Ecommerece\\Backend\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Application\\Application.csproj",
+        "projectUniqueName": "D:\\Clothing_Ecommerece\\Backend\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Application\\Application.csproj",
+        "projectPath": "D:\\Clothing_Ecommerece\\Backend\\Application\\Application.csproj",
         "packagesPath": "C:\\Users\\DOTNET\\.nuget\\packages\\",
-        "outputPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Application\\obj\\",
+        "outputPath": "D:\\Clothing_Ecommerece\\Backend\\Application\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -37,8 +37,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Domain\\Domain.csproj": {
-                "projectPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Domain\\Domain.csproj"
+              "D:\\Clothing_Ecommerece\\Backend\\Domain\\Domain.csproj": {
+                "projectPath": "D:\\Clothing_Ecommerece\\Backend\\Domain\\Domain.csproj"
               }
             }
           }
@@ -89,6 +89,10 @@
               "target": "Package",
               "version": "[13.0.3, )"
             },
+            "Razorpay": {
+              "target": "Package",
+              "version": "[3.1.4, )"
+            },
             "SixLabors.ImageSharp": {
               "target": "Package",
               "version": "[3.1.5, )"
@@ -114,14 +118,14 @@
         }
       }
     },
-    "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Domain\\Domain.csproj": {
+    "D:\\Clothing_Ecommerece\\Backend\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Domain\\Domain.csproj",
+        "projectUniqueName": "D:\\Clothing_Ecommerece\\Backend\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Domain\\Domain.csproj",
+        "projectPath": "D:\\Clothing_Ecommerece\\Backend\\Domain\\Domain.csproj",
         "packagesPath": "C:\\Users\\DOTNET\\.nuget\\packages\\",
-        "outputPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Domain\\obj\\",
+        "outputPath": "D:\\Clothing_Ecommerece\\Backend\\Domain\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -162,6 +166,10 @@
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.7, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.3, )"
             }
           },
           "imports": [
@@ -184,14 +192,14 @@
         }
       }
     },
-    "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Presistance\\Presistance.csproj": {
+    "D:\\Clothing_Ecommerece\\Backend\\Presistance\\Presistance.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Presistance\\Presistance.csproj",
+        "projectUniqueName": "D:\\Clothing_Ecommerece\\Backend\\Presistance\\Presistance.csproj",
         "projectName": "Presistance",
-        "projectPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Presistance\\Presistance.csproj",
+        "projectPath": "D:\\Clothing_Ecommerece\\Backend\\Presistance\\Presistance.csproj",
         "packagesPath": "C:\\Users\\DOTNET\\.nuget\\packages\\",
-        "outputPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Presistance\\obj\\",
+        "outputPath": "D:\\Clothing_Ecommerece\\Backend\\Presistance\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
@@ -217,8 +225,8 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
-              "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Application\\Application.csproj": {
-                "projectPath": "D:\\Clothing_Ecommerece\\Backend\\CleanArchitecture\\Application\\Application.csproj"
+              "D:\\Clothing_Ecommerece\\Backend\\Application\\Application.csproj": {
+                "projectPath": "D:\\Clothing_Ecommerece\\Backend\\Application\\Application.csproj"
               }
             }
           }
