@@ -69,9 +69,13 @@
               "target": "Package",
               "version": "[11.9.2, )"
             },
-            "MediatR": {
+            "MediatR.Extensions.FluentValidation.AspNetCore": {
               "target": "Package",
-              "version": "[12.3.0, )"
+              "version": "[5.1.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.0.0, )"
             },
             "Microsoft.AspNetCore.Hosting.Abstractions": {
               "target": "Package",
