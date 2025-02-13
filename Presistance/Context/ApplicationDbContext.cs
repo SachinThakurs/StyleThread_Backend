@@ -63,7 +63,7 @@ namespace Presistance.Context
                 .WithMany()
                 .HasForeignKey(pvs => pvs.SizeId);
 
-            modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<Sleeve>().HasData(SeedData.GetSleeves());
             modelBuilder.Entity<Fit>().HasData(SeedData.GetFits());
             modelBuilder.Entity<Size>().HasData(SeedData.GetSizes());

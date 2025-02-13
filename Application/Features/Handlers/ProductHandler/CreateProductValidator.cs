@@ -4,9 +4,9 @@ using FluentValidation;
 
 namespace Application.Features.Handlers.ProductHandler
 {
-    public class CreateProductValidator : AbstractValidator<GenericCreateCommand<ProductDto, ProductDto>>
+    public class RegisterValidator : AbstractValidator<GenericCreateCommand<ProductDto, ProductDto>>
     {
-        public CreateProductValidator()
+        public RegisterValidator()
         {
             RuleFor(x => x.Entity.Name)
                 .NotEmpty().WithMessage("Name is required.")
