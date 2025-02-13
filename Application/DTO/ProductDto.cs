@@ -36,12 +36,14 @@ namespace Application.DTO
         public int Discount { get; set; }
         public int Inventory { get; set; }
         public List<string> Image { get; set; }
-        public virtual ICollection<ProductVariantSizeDto> ProductVariantSizes { get; set; }
+        public ICollection<ProductVariantSizeDto> ProductVariantSizes { get; set; } // Ensure proper mapping
     }
+
     public class ProductVariantSizeDto
     {
         public int ProductVariantId { get; set; }
         public int SizeId { get; set; }
+        public SizeDto Size { get; set; } // Ensure Size object is fully mapped
     }
 
     public class SizeDto

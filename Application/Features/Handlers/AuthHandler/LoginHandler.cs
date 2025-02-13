@@ -16,7 +16,8 @@ namespace Application.Features.Handlers.AuthHandler
                 return new GenericResponse<string> { Success = false, Message = "Login request cannot be null." };
             try
             {
-                return (await _userService.Login(request.Entity));
+                var data = await _userService.Login(request.Entity);
+                return data;
             }
             catch (Exception ex)
             {

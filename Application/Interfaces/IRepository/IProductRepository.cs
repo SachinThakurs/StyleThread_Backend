@@ -9,5 +9,6 @@ namespace Application.Interfaces.IRepository
 {
     public interface IProductRepository : IRepository<Product>
     {
+        public Task<IEnumerable<Product>> GetAllWithVariantsAndSizesAsync(CancellationToken cancellationToken);
     }
 }

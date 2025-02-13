@@ -31,5 +31,6 @@ namespace Application.DTO
             public TResponse? Content { get; set; } 
             public bool Success { get; set; }
         }
+
     }
 }
