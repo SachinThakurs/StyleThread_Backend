@@ -32,3 +32,6 @@ obj/
 
 # Ignore AssemblyReference files
 *.csproj.AssemblyReference.cache
+
+# Ignore dtbcache files
+*.dtbcache.v2
