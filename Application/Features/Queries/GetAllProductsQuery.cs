@@ -13,20 +13,49 @@ namespace Application.Features.Queries
 {
     public class GetAllProductsQuery : IRequest<IEnumerable<ProductDto>>
     {
-        internal class GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper) : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDto>>
+        internal class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, IEnumerable<ProductDto>>
         {
-            private readonly IUnitOfWork _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
-            private readonly IMapper _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            private readonly IUnitOfWork _unitOfWork;
+            private readonly IMapper _mapper;
+
+            public GetAllProductsQueryHandler(IUnitOfWork unitOfWork, IMapper mapper)
+            {
+                _unitOfWork = unitOfWork ?? throw new ArgumentNullException(nameof(unitOfWork));
+                _mapper = mapper ?? throw new ArgumentNullException(nameof(mapper));
+            }
 
             public async Task<IEnumerable<ProductDto>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
             {
                 // Fetch all products along with their variants and sizes in a single optimized query
                 var productData = await _unitOfWork.productRepository.GetAllWithVariantsAndSizesAsync(cancellationToken);
+                var sizeData = await _unitOfWork.sizeRepository.GetAllAsync(cancellationToken);
+
+                // Create a dictionary for quick lookup of sizes
+                var sizeDictionary = sizeData.ToDictionary(s => s.SizeId, s => s.SizeName);
 
                 // Ensure data is mapped properly
-                var productDtos = _mapper.Map<IEnumerable<ProductDto>>(productData) ?? Enumerable.Empty<ProductDto>();
+                var productRecord = _mapper.Map<IEnumerable<ProductDto>>(productData) ?? Enumerable.Empty<ProductDto>();
 
-                return productDtos;
+                //Use LINQ to map size
+                productRecord = productRecord.Select(product =>
+                {
+                    product.ProductVariants = product.ProductVariants.Select(variant =>
+                    {
+                        variant.ProductVariantSizes = variant.ProductVariantSizes.Select(variantSize =>
+                        {
+                            variantSize.Size = new SizeDto
+                            {
+                                SizeId = variantSize.SizeId,
+                                SizeName = sizeDictionary.TryGetValue(variantSize.SizeId, out var sizeName) ? sizeName : ""
+                            };
+                            return variantSize;
+                        }).ToList();
+                        return variant;
+                    }).ToList();
+                    return product;
+                }).ToList();
+
+                return productRecord;
             }
         }
     }

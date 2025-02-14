@@ -11,11 +11,28 @@ namespace Presistance.Repository
     {
         public async Task<IEnumerable<Product>> GetAllWithVariantsAndSizesAsync(CancellationToken cancellationToken)
         {
-            return await _dbContext.Product
+            var products = await _dbContext.Product
                 .Include(p => p.ProductVariants)
                     .ThenInclude(v => v.ProductVariantSizes)
-                        .ThenInclude(s => s.Size)
                 .ToListAsync(cancellationToken);
+
+            // Manually map the SizeId to Size (perhaps in a service layer or mapping)
+            //foreach (var product in products)
+            //{
+            //    foreach (var variant in product.ProductVariants)
+            //    {
+            //        foreach (var variantSize in variant.ProductVariantSizes)
+            //        {
+            //            var size = await _dbContext.Sizes
+            //                .FirstOrDefaultAsync(s => s.SizeId == variantSize.SizeId, cancellationToken);
+            //            variantSize.Size = size; // Manually set the Size entity based on SizeId
+            //        }
+            //    }
+            //}
+
+            return products;
         }
+
+
     }
 }

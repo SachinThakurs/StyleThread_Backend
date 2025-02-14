@@ -20,5 +20,12 @@ namespace Presistance.Repository
 
             return data ?? new List<Domain.Entities.ProductVariantSize>();
         }
+
+        public async Task<bool> UpdateProductVariantSizeAsync(IEnumerable<Domain.Entities.ProductVariantSize> productVariantsizes, CancellationToken cancellationToken)
+        {
+            _dbContext.ProductVariantSizes.UpdateRange(productVariantsizes);
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return await Task.FromResult(true);
+        }
     }
 }

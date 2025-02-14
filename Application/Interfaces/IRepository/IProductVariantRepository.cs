@@ -10,5 +10,6 @@ namespace Application.Interfaces.IRepository
     public interface IProductVariantRepository : IRepository<ProductVariant>  
     {
         Task<ICollection<ProductVariant>> GetByProductIdAsync(int productId, CancellationToken cancellationToken);
+        Task<bool> UpdateProductVariantAsync(IEnumerable<ProductVariant> productVariants, CancellationToken cancellationToken);
     }
 }
