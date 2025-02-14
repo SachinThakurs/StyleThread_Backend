@@ -19,8 +19,9 @@ namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Pe
             IdentityResult? result = await _userManager.CreateAsync(registerRequest, password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(registerRequest, "Administrator");
+                await _userManager.AddToRoleAsync(registerRequest, "Visitor");
             }
+
             return result;
         }
 
@@ -59,7 +60,7 @@ namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Pe
                 issuer: "SACHIN",
                 audience: null, // Customize this if you have an audience
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(30), // Token expiration
+                expires: DateTime.Now.AddHours(24), // Token expiration
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

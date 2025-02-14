@@ -925,32 +925,6 @@ namespace Presistance.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "f7ced334-d652-4319-9bde-81c21277019b",
-                            Name = "SuperAdministrator",
-                            NormalizedName = "SUPERADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "483a176e-65f9-4fbc-90f8-9807fe0898ab",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "051c4d69-c7a5-42bd-8cd3-6a20b03a10c6",
-                            Name = "Seller",
-                            NormalizedName = "SELLER"
-                        },
-                        new
-                        {
-                            Id = "07320367-a488-4b05-86b4-f50c019191e6",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -1193,7 +1167,7 @@ namespace Presistance.Migrations
                         .IsRequired();
 
                     b.HasOne("Domain.Entities.Size", "Size")
-                        .WithMany("ProductVariantSizes")
+                        .WithMany()
                         .HasForeignKey("SizeId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1338,11 +1312,6 @@ namespace Presistance.Migrations
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductVariant", b =>
-                {
-                    b.Navigation("ProductVariantSizes");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Size", b =>
                 {
                     b.Navigation("ProductVariantSizes");
                 });

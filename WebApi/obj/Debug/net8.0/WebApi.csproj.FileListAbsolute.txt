@@ -346,3 +346,6 @@ D:\Clothing_Ecommerece\Backend\WebApi\obj\Debug\net8.0\refint\WebApi.dll
 D:\Clothing_Ecommerece\Backend\WebApi\obj\Debug\net8.0\WebApi.pdb
 D:\Clothing_Ecommerece\Backend\WebApi\obj\Debug\net8.0\WebApi.genruntimeconfig.cache
 D:\Clothing_Ecommerece\Backend\WebApi\obj\Debug\net8.0\ref\WebApi.dll
+D:\Clothing_Ecommerece\Backend\WebApi\bin\Debug\net8.0\MediatR.Extensions.FluentValidation.AspNetCore.dll
+D:\Clothing_Ecommerece\Backend\WebApi\bin\Debug\net8.0\MediatR.Extensions.Microsoft.DependencyInjection.dll
+D:\Clothing_Ecommerece\Backend\WebApi\obj\Debug\net8.0\WebApi.MvcApplicationPartsAssemblyInfo.cs

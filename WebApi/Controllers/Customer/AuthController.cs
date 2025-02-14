@@ -21,10 +21,25 @@ namespace WebApi.Controllers.Product
     public class AuthController(IMediator _mediator) : ControllerBase
     {
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] GenericCreateCommand<CustomerDto, IdentityResult> userData, CancellationToken cancellationToken)
+        public async Task<IActionResult> Register([FromBody] GenericCreateCommand<CustomerDto, GenericResponse<string>> userData, CancellationToken cancellationToken)
         {
-            return Ok( await _mediator.Send(userData, cancellationToken));
+            try
+            {
+                var response = await _mediator.Send(userData, cancellationToken);
+                return Ok(response);
+            }
+            catch (Exception ex)
+            {
+                // Handle other errors
+                return StatusCode(StatusCodes.Status500InternalServerError, new GenericResponse<string>
+                {
+                    Success = false,
+                    Message = ex.Message,
+                    Content = "Error"
+                });
+            }
         }
+
         [HttpPost("Login")]
         public async Task<IActionResult> Login([FromBody] GenericCreateCommand<LoginRequestDto, GenericResponse<string>> userCredentials, CancellationToken cancellationToken)
         {

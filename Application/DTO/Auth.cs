@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,6 +10,7 @@ namespace Application.DTO
 {
     public class Auth
     {
+        [Index(nameof(Email), IsUnique = true)]
         public class LoginRequestDto
         {
             public required string Email { get; set; }
@@ -15,6 +18,7 @@ namespace Application.DTO
         }
         public class CustomerDto
         {
+            
             public int CustomerId { get; set; }
             public required string UserName { get; set; }
             public required string FirstName { get; set; }
