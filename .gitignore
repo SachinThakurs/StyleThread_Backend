@@ -8,3 +8,27 @@
 .vs/CleanArchitecture/FileContentIndex/25e70d5b-c423-4710-9fdf-af215e7ae92b.vsidx
 .vs/CleanArchitecture/FileContentIndex/236f167e-937c-412e-983b-a86e6433a640.vsidx
 .vs/
+# Ignore DLLs
+*.dll
+
+# Ignore PDBs
+*.pdb
+
+# Ignore SUO files
+*.suo
+
+# Ignore bin and obj directories
+bin/
+obj/
+
+# Ignore sourcelink files
+*.sourcelink.json
+
+# Ignore AssemblyInfo files
+*.AssemblyInfo.cs
+
+# Ignore AssemblyInfoInputs files
+*.AssemblyInfoInputs.cache
+
+# Ignore AssemblyReference files
+*.csproj.AssemblyReference.cache
