@@ -12,8 +12,8 @@ using Presistance.Context;
 namespace Presistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250214072250_ProductVariantSize_Table")]
-    partial class ProductVariantSize_Table
+    [Migration("20250217052354_initialLoad")]
+    partial class initialLoad
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -736,8 +736,6 @@ namespace Presistance.Migrations
 
                     b.HasKey("ProductVariantId", "SizeId");
 
-                    b.HasIndex("SizeId");
-
                     b.ToTable("ProductVariantSizes");
                 });
 
@@ -1169,15 +1167,7 @@ namespace Presistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Size", "Size")
-                        .WithMany()
-                        .HasForeignKey("SizeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("ProductVariant");
-
-                    b.Navigation("Size");
                 });
 
             modelBuilder.Entity("Domain.Entities.Review", b =>

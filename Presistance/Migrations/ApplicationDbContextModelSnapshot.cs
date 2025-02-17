@@ -36,7 +36,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brand");
+                    b.ToTable("Brand", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>
@@ -65,7 +65,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Cart");
+                    b.ToTable("Cart", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
@@ -82,7 +82,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category");
+                    b.ToTable("Category", (string)null);
 
                     b.HasData(
                         new
@@ -181,7 +181,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("ColorId");
 
-                    b.ToTable("Color");
+                    b.ToTable("Color", (string)null);
 
                     b.HasData(
                         new
@@ -356,7 +356,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("FabricId");
 
-                    b.ToTable("Fabric");
+                    b.ToTable("Fabric", (string)null);
 
                     b.HasData(
                         new
@@ -430,7 +430,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("FabricCareId");
 
-                    b.ToTable("FabricCares");
+                    b.ToTable("FabricCares", (string)null);
 
                     b.HasData(
                         new
@@ -479,7 +479,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("FitId");
 
-                    b.ToTable("Fits");
+                    b.ToTable("Fits", (string)null);
 
                     b.HasData(
                         new
@@ -518,7 +518,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("NeckTypeId");
 
-                    b.ToTable("NeckTypes");
+                    b.ToTable("NeckTypes", (string)null);
 
                     b.HasData(
                         new
@@ -582,7 +582,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("CustomerId1");
 
-                    b.ToTable("Order");
+                    b.ToTable("Order", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderItem", b =>
@@ -611,7 +611,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem");
+                    b.ToTable("OrderItem", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -681,7 +681,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("SleeveId");
 
-                    b.ToTable("Product");
+                    b.ToTable("Product", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductVariant", b =>
@@ -720,7 +720,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariants");
+                    b.ToTable("ProductVariants", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductVariantSize", b =>
@@ -733,7 +733,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("ProductVariantId", "SizeId");
 
-                    b.ToTable("ProductVariantSizes");
+                    b.ToTable("ProductVariantSizes", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Review", b =>
@@ -770,7 +770,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Review");
+                    b.ToTable("Review", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Size", b =>
@@ -787,7 +787,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("SizeId");
 
-                    b.ToTable("Sizes");
+                    b.ToTable("Sizes", (string)null);
 
                     b.HasData(
                         new
@@ -836,7 +836,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("SleeveId");
 
-                    b.ToTable("Sleeves");
+                    b.ToTable("Sleeves", (string)null);
 
                     b.HasData(
                         new
@@ -895,7 +895,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Wishlist");
+                    b.ToTable("Wishlist", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

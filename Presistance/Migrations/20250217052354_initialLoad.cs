@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Presistance.Migrations
 {
     /// <inheritdoc />
-    public partial class initLoad : Migration
+    public partial class initialLoad : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -512,7 +512,7 @@ namespace Presistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductVariantSize",
+                name: "ProductVariantSizes",
                 columns: table => new
                 {
                     ProductVariantId = table.Column<int>(type: "int", nullable: false),
@@ -520,30 +520,13 @@ namespace Presistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductVariantSize", x => new { x.ProductVariantId, x.SizeId });
+                    table.PrimaryKey("PK_ProductVariantSizes", x => new { x.ProductVariantId, x.SizeId });
                     table.ForeignKey(
-                        name: "FK_ProductVariantSize_ProductVariants_ProductVariantId",
+                        name: "FK_ProductVariantSizes_ProductVariants_ProductVariantId",
                         column: x => x.ProductVariantId,
                         principalTable: "ProductVariants",
                         principalColumn: "ProductVariantId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ProductVariantSize_Sizes_SizeId",
-                        column: x => x.SizeId,
-                        principalTable: "Sizes",
-                        principalColumn: "SizeId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.InsertData(
-                table: "AspNetRoles",
-                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
-                values: new object[,]
-                {
-                    { "44de8dd5-0d96-42a7-a0a7-358954193b74", null, "Administrator", "ADMINISTRATOR" },
-                    { "6185dd43-925d-4fbf-84d2-225d0883053b", null, "Visitor", "VISITOR" },
-                    { "c8b81d6a-6a17-4546-8a24-9b1d445997fc", null, "Seller", "SELLER" },
-                    { "d4e72011-e26a-4368-a305-637e0d380d51", null, "SuperAdministrator", "SUPERADMINISTRATOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -783,11 +766,6 @@ namespace Presistance.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductVariantSize_SizeId",
-                table: "ProductVariantSize",
-                column: "SizeId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Review_CustomerId1",
                 table: "Review",
                 column: "CustomerId1");
@@ -833,10 +811,13 @@ namespace Presistance.Migrations
                 name: "OrderItem");
 
             migrationBuilder.DropTable(
-                name: "ProductVariantSize");
+                name: "ProductVariantSizes");
 
             migrationBuilder.DropTable(
                 name: "Review");
+
+            migrationBuilder.DropTable(
+                name: "Sizes");
 
             migrationBuilder.DropTable(
                 name: "Wishlist");
@@ -849,9 +830,6 @@ namespace Presistance.Migrations
 
             migrationBuilder.DropTable(
                 name: "ProductVariants");
-
-            migrationBuilder.DropTable(
-                name: "Sizes");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
