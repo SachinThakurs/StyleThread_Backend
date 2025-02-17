@@ -94,47 +94,6 @@ namespace Application.Features.Handlers.ProductHandler
                 return CreateErrorResponse("An error occurred while processing your request.", ex.Message);
             }
         }
-
-
-        private async Task<List<string>> ProcessImagesAsync(List<string> base64Images, CancellationToken cancellationToken)
-        {
-            var imagePaths = new List<string>();
-            var uploadDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "images");
-
-            // Create the directory if it doesn't exist
-            if (!Directory.Exists(uploadDirectory))
-            {
-                Directory.CreateDirectory(uploadDirectory);
-            }
-
-            foreach (var base64Image in base64Images)
-            {
-                if (string.IsNullOrWhiteSpace(base64Image) || !base64Image.Contains(","))
-                {
-                    throw new ArgumentException("Invalid base64 image format.", nameof(base64Image));
-                }
-
-                var parts = base64Image.Split(',');
-                if (parts.Length < 2)
-                {
-                    throw new ArgumentException("Base64 image string does not contain valid data.", nameof(base64Image));
-                }
-
-                var imageData = parts[1]; // Get the actual base64 data
-                var imageBytes = Convert.FromBase64String(imageData);
-
-                var fileName = Guid.NewGuid().ToString() + ".png"; // Unique file name
-                var filePath = Path.Combine(uploadDirectory, fileName);
-
-                await File.WriteAllBytesAsync(filePath, imageBytes, cancellationToken); // Save the image
-
-                imagePaths.Add($"/images/{fileName}"); // Store relative path
-            }
-
-            return imagePaths;
-        }
-
-
         private GenericResponse<ProductDto> CreateErrorResponse(string message, string error)
         {
             return new GenericResponse<ProductDto>

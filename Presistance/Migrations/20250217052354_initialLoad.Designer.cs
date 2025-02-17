@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Presistance.Context;
 
@@ -11,9 +12,11 @@ using Presistance.Context;
 namespace Presistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250217052354_initialLoad")]
+    partial class initialLoad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -36,7 +39,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("BrandId");
 
-                    b.ToTable("Brand", (string)null);
+                    b.ToTable("Brand");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cart", b =>
@@ -65,7 +68,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Cart", (string)null);
+                    b.ToTable("Cart");
                 });
 
             modelBuilder.Entity("Domain.Entities.Category", b =>
@@ -82,7 +85,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("CategoryId");
 
-                    b.ToTable("Category", (string)null);
+                    b.ToTable("Category");
 
                     b.HasData(
                         new
@@ -181,7 +184,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("ColorId");
 
-                    b.ToTable("Color", (string)null);
+                    b.ToTable("Color");
 
                     b.HasData(
                         new
@@ -356,7 +359,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("FabricId");
 
-                    b.ToTable("Fabric", (string)null);
+                    b.ToTable("Fabric");
 
                     b.HasData(
                         new
@@ -430,7 +433,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("FabricCareId");
 
-                    b.ToTable("FabricCares", (string)null);
+                    b.ToTable("FabricCares");
 
                     b.HasData(
                         new
@@ -479,7 +482,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("FitId");
 
-                    b.ToTable("Fits", (string)null);
+                    b.ToTable("Fits");
 
                     b.HasData(
                         new
@@ -518,7 +521,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("NeckTypeId");
 
-                    b.ToTable("NeckTypes", (string)null);
+                    b.ToTable("NeckTypes");
 
                     b.HasData(
                         new
@@ -582,7 +585,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("CustomerId1");
 
-                    b.ToTable("Order", (string)null);
+                    b.ToTable("Order");
                 });
 
             modelBuilder.Entity("Domain.Entities.OrderItem", b =>
@@ -611,7 +614,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderItem", (string)null);
+                    b.ToTable("OrderItem");
                 });
 
             modelBuilder.Entity("Domain.Entities.Product", b =>
@@ -681,7 +684,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("SleeveId");
 
-                    b.ToTable("Product", (string)null);
+                    b.ToTable("Product");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductVariant", b =>
@@ -720,7 +723,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductVariants", (string)null);
+                    b.ToTable("ProductVariants");
                 });
 
             modelBuilder.Entity("Domain.Entities.ProductVariantSize", b =>
@@ -733,7 +736,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("ProductVariantId", "SizeId");
 
-                    b.ToTable("ProductVariantSizes", (string)null);
+                    b.ToTable("ProductVariantSizes");
                 });
 
             modelBuilder.Entity("Domain.Entities.Review", b =>
@@ -770,7 +773,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Review", (string)null);
+                    b.ToTable("Review");
                 });
 
             modelBuilder.Entity("Domain.Entities.Size", b =>
@@ -787,7 +790,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("SizeId");
 
-                    b.ToTable("Sizes", (string)null);
+                    b.ToTable("Sizes");
 
                     b.HasData(
                         new
@@ -836,7 +839,7 @@ namespace Presistance.Migrations
 
                     b.HasKey("SleeveId");
 
-                    b.ToTable("Sleeves", (string)null);
+                    b.ToTable("Sleeves");
 
                     b.HasData(
                         new
@@ -895,7 +898,7 @@ namespace Presistance.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("Wishlist", (string)null);
+                    b.ToTable("Wishlist");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

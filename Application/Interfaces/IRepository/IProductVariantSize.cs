@@ -10,5 +10,6 @@ namespace Application.Interfaces.IRepository
     public interface IProductVariantSize 
     {
         Task<ICollection<ProductVariantSize>> GetByProductVariantSizeIdAsync(int productVariantId, CancellationToken cancellationToken);
+        Task<bool> UpdateProductVariantSizeAsync(IEnumerable<ProductVariantSize> productVariantsizes, CancellationToken cancellationToken);
     }
 }

@@ -18,18 +18,13 @@ public class MappingProfile : Profile
         //    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image)); // No conversion here
 
         // Map ProductVariantSizeDto to ProductVariantSize
-        CreateMap<ProductVariantSizeDto, ProductVariantSize>()
-            .ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.SizeId))
-            .ForMember(dest => dest.ProductVariantId, opt => opt.MapFrom(src => src.ProductVariantId));
+        //CreateMap<ProductVariantSizeDto, ProductVariantSize>()
+        //    .ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.SizeId))
+        //    .ForMember(dest => dest.ProductVariantId, opt => opt.MapFrom(src => src.ProductVariantId));
 
         // Map Product to ProductDto
         CreateMap<Product, ProductDto>()
             .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.ProductVariants));
-
-        // Map ProductVariant to ProductVariantDto
-        //CreateMap<ProductVariant, ProductVariantDto>()
-        //    .ForMember(dest => dest.ProductVariantSizes, opt => opt.MapFrom(src => src.ProductVariantSizes))
-        //    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image)); // No conversion here
 
         // Map ProductVariantSize to ProductVariantSizeDto
         CreateMap<ProductVariantSize, ProductVariantSizeDto>()
@@ -56,9 +51,19 @@ public class MappingProfile : Profile
         CreateMap<ProductVariantDto, ProductVariant>().ReverseMap();
 
         // Map ProductVariantSizeDto to ProductVariantSize
+        //CreateMap<ProductVariantSizeDto, ProductVariantSize>()
+        //    .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))  // Correct mapping for Size
+        //    .ReverseMap();
+
+        // Map ProductVariantSizeDto to ProductVariantSize (only for return)
         CreateMap<ProductVariantSizeDto, ProductVariantSize>()
-            .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))
+            .ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.SizeId))
+            .ForMember(dest => dest.ProductVariantId, opt => opt.MapFrom(src => src.ProductVariantId))
             .ReverseMap();
+
+        // Map ProductVariant to ProductVariantDto and include the ProductVariantSizeDto with SizeDto
+        CreateMap<ProductVariant, ProductVariantDto>()
+            .ForMember(dest => dest.ProductVariantSizes, opt => opt.MapFrom(src => src.ProductVariantSizes));
 
         // Map SizeDto to Size and vice versa
         CreateMap<SizeDto, Size>().ReverseMap();

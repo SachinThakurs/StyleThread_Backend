@@ -73,7 +73,13 @@ namespace Application.Features.Handlers.ProductHandler
 
             var product = _mapper.Map<Product>(request.Entity) ?? throw new InvalidOperationException("Mapping to Product entity failed.");
 
-            
+            await _unitOfWork.productVariantRepository.UpdateProductVariantAsync(product.ProductVariants, cancellationToken);
+            await _unitOfWork.productVariantSize
+                   .UpdateProductVariantSizeAsync( product?.ProductVariants?
+                   .SelectMany(x => x.ProductVariantSizes ?? new List<ProductVariantSize>())
+                   .ToList() ?? new List<ProductVariantSize>(), cancellationToken);
+
+
 
             await _unitOfWork.productRepository.UpdateAsync(product);
             await _unitOfWork.productRepository.SaveAsync(cancellationToken);
