@@ -1,6 +1,4 @@
-﻿
-
-using Application.DTO;
+﻿using Application.DTO;
 using Application.Features.Command.GenericCommands;
 using Application.Interfaces.IRepository;
 using AutoMapper;
@@ -18,7 +16,7 @@ namespace Application.Features.Handlers.BrandHandler
             {
                 if (request?.Entity != null)
                 {
-                    Brand findBrandWithBrandId = await _unitOfWork.brandRepository.GetByIdAsync(request.Entity.BrandId, cancellationToken);
+                    Domain.Entities.Brand findBrandWithBrandId = await _unitOfWork.brandRepository.GetByIdAsync(request.Entity.BrandId, cancellationToken);
                     if (findBrandWithBrandId != null)
                     {
                         var updateBrandBinding = _mapper.Map(request.Entity, findBrandWithBrandId);

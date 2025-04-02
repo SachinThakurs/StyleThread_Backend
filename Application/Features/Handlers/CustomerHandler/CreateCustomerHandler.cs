@@ -21,7 +21,7 @@ namespace Application.Features.Handlers.CustomerHandler
             }
 
             var customer = _mapper.Map<Customer>(request.Entity);
-            await _unitOfWork.customerRepository.InsertAsync(customer);
+            await _unitOfWork.customerRepository.InsertAsync(customer, cancellationToken);
             await _unitOfWork.customerRepository.SaveAsync(cancellationToken);
 
             return new GenericResponse<CustomerDto>

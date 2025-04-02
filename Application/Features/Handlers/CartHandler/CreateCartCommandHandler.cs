@@ -1,27 +1,42 @@
-﻿//using Application.Features.Cart.Command;
-//using Application.Interfaces;
-//using AutoMapper;
-//using MediatR;
-//using System;
-//using System.Collections.Generic;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
-//using static Application.Features.Command.CartCommand;
-//using static Application.Features.Command.WishlistCommand;
+﻿using Application.DTO;
+using Application.Features.Command.GenericCommands;
+using Application.Interfaces;
+using Application.Interfaces.IRepository;
+using AutoMapper;
+using Domain.Entities;
+using MediatR;
+using static Application.DTO.Auth;
 
-//namespace Application.Features.Handlers.CartHandler
-//{
-//    internal class CreateCartCommandHandler(IApplicationDbcontext dbcontext, IMapper mapper) : IRequestHandler<CreateCartCommand, int>
-//    {
+namespace Application.Features.Handlers.CartHandler
+{
+    internal class CreateCartCommandHandler(IUnitOfWork _unitOfWork, IMapper mapper) : IRequestHandler<GenericCreateCommand<CartDto, GenericResponse<string>>, GenericResponse<string>>
+    {
+        public async Task<GenericResponse<string>> Handle(GenericCreateCommand<CartDto, GenericResponse<string>> request, CancellationToken cancellationToken)
+        {
+            try
+            {
+                var cartData = mapper.Map<Cart>(request.Entity);
 
-//        public async Task<int> Handle(CreateCartCommand request, CancellationToken cancellationToken)
-//        {
-//            var cart = mapper.Map<Domain.Entites.Cart>(request);
+                await _unitOfWork.cartRepository.InsertAsync(cartData, cancellationToken);
+                await _unitOfWork.cartRepository.SaveAsync(cancellationToken);
 
-//            await dbcontext.Cart.AddAsync(cart);
-//            await dbcontext.SaveChangesAsync();
-//            return cart.CartId;
-//        }
-//    }
-//}
+                return new GenericResponse<string>
+                {
+                    Content = "Item Successfully added to cart.",
+                    Message = "Data added successfully",
+                    Success = true
+                };
+            }
+            catch (Exception ex)
+            {
+                return new GenericResponse<string>
+                {
+                    Content = "Error occured while add the item in the cart.",
+                    Message = "Error occured while saving the data.",
+                    Success = false
+                };
+            }
+            
+        }
+    }
+}

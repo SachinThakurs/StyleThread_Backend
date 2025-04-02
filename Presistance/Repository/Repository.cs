@@ -28,9 +28,9 @@ namespace Persistence.Repository
             return await _table.FindAsync(id, cancellationToken);
         }
 
-        public async Task InsertAsync(T obj)
+        public async Task InsertAsync(T obj, CancellationToken cancellationToken)
         {
-            await _table.AddAsync(obj);
+            await _table.AddAsync(obj, cancellationToken);
         }
 
         public async Task UpdateAsync(T obj)

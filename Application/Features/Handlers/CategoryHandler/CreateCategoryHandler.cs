@@ -24,7 +24,7 @@ namespace Application.Features.Handlers.CategoryHandler
             }
 
             var category = _mapper.Map<Category>(request.Entity);
-            await _unitOfWork.categoryRepository.InsertAsync(category);
+            await _unitOfWork.categoryRepository.InsertAsync(category, cancellationToken);
             await _unitOfWork.categoryRepository.SaveAsync(cancellationToken);
 
             return new GenericResponse<CategoryDto>

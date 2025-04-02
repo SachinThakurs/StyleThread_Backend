@@ -9,7 +9,7 @@ namespace Application.Interfaces.IRepository
     {
         Task<IEnumerable<T>> GetAllAsync(CancellationToken cancellationToken);
         Task<T> GetByIdAsync(object id, CancellationToken cancellationToken);
-        Task InsertAsync(T obj);
+        Task InsertAsync(T obj, CancellationToken cancellationToken);
         Task UpdateAsync(T obj);
         Task DeleteAsync(object id, CancellationToken cancellationToken);
         Task SaveAsync(CancellationToken cancellationToken);

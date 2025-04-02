@@ -22,10 +22,10 @@ namespace Application.Features.Handlers.BrandHandler
             {
                 if(request?.Entity != null)
                 {
-                    Brand customer = mapper.Map<Brand>(request.Entity);
+                    Domain.Entities.Brand customer = mapper.Map<Domain.Entities.Brand>(request.Entity);
                     if(customer != null)
                     {
-                        await _unitOfWork.brandRepository.InsertAsync(customer);
+                        await _unitOfWork.brandRepository.InsertAsync(customer, cancellationToken);
                         await _unitOfWork.brandRepository.SaveAsync(cancellationToken);
                         return new GenericResponse<BrandDto> { Content = request.Entity, Error = "null", Message = "Brand Created Successfully", Success = true };
                     }

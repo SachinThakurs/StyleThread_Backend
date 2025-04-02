@@ -77,7 +77,7 @@ namespace Application.Features.Handlers.ProductHandler
                     throw new InvalidOperationException("Mapping to Product entity failed.");
 
                 // Save Product
-                await _unitOfWork.productRepository.InsertAsync(product);
+                await _unitOfWork.productRepository.InsertAsync(product, cancellationToken);
                 await _unitOfWork.productRepository.SaveAsync(cancellationToken);
 
                 var responseData = _mapper.Map<ProductDto>(product);
