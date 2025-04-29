@@ -19,7 +19,7 @@ namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Pe
             IdentityResult? result = await _userManager.CreateAsync(registerRequest, password);
             if (result.Succeeded)
             {
-                await _userManager.AddToRoleAsync(registerRequest, "Visitor");
+                await _userManager.AddToRoleAsync(registerRequest, "ADMINISTRATOR");
             }
 
             return result;
