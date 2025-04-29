@@ -49,22 +49,24 @@ namespace Application.Features.Handlers.ProductHandler
 
                         foreach (var image in variant.Image) // Assuming Image is List<byte[]>
                         {
-                            if (!image.StartsWith("http"))
+                            if (!string.IsNullOrWhiteSpace(image))
                             {
-                                string fileName = $"{Guid.NewGuid()}.jpg"; // Generate a unique file name
-                                byte[] imageByteArray = Convert.FromBase64String(image);
-                                var imageUrl = await _cloudinaryService.UploadImageAsync(imageByteArray, fileName);
-                                if (imageUrl == null)
+                                if (!image.StartsWith("http"))
                                 {
-                                    throw new InvalidOperationException("Error while processing the image.");
+                                    string fileName = $"{Guid.NewGuid()}.jpg"; // Generate a unique file name
+                                    byte[] imageByteArray = Convert.FromBase64String(image);
+                                    var imageUrl = await _cloudinaryService.UploadImageAsync(imageByteArray, fileName);
+                                    if (imageUrl == null)
+                                    {
+                                        throw new InvalidOperationException("Error while processing the image.");
+                                    }
+                                    uploadedImageUrls.Add(imageUrl);
                                 }
-                                uploadedImageUrls.Add(imageUrl);
+                                else
+                                {
+                                    uploadedImageUrls.Add(image);
+                                }
                             }
-                            else
-                            {
-                                uploadedImageUrls.Add(image);
-                            }
-                            
                         }
 
                         // Update the Image property with Cloudinary URLs

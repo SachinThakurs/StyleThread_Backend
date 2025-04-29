@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Presistance.Migrations
 {
     /// <inheritdoc />
-    public partial class initialLoad : Migration
+    public partial class intiLoad : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

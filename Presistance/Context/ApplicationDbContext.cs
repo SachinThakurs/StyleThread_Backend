@@ -59,13 +59,7 @@ namespace Presistance.Context
                 .HasForeignKey(pvs => pvs.ProductVariantId)
                 .OnDelete(DeleteBehavior.Cascade); // Ensure cascading delete is handled correctly
 
-            //modelBuilder.Entity<ProductVariantSize>()
-            //    .HasOne(pvs => pvs.Size)
-            //    .WithMany() // If there's no collection property in `Size`, use this
-            //    .HasForeignKey(pvs => pvs.SizeId)
-            //    .OnDelete(DeleteBehavior.Restrict); // Prevent accidental deletions
-
-            //modelBuilder.ApplyConfiguration(new RoleConfiguration());
+            modelBuilder.ApplyConfiguration(new RoleConfiguration());
             modelBuilder.Entity<Sleeve>().HasData(SeedData.GetSleeves());
             modelBuilder.Entity<Fit>().HasData(SeedData.GetFits());
             modelBuilder.Entity<Size>().HasData(SeedData.GetSizes());

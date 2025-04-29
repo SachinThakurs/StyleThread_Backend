@@ -12,8 +12,8 @@ using Presistance.Context;
 namespace Presistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250217052354_initialLoad")]
-    partial class initialLoad
+    [Migration("20250429093825_AddRole")]
+    partial class AddRole
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -926,6 +926,32 @@ namespace Presistance.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "51825ff7-52b2-40bb-975f-d501997fd4ca",
+                            Name = "SuperAdministrator",
+                            NormalizedName = "SUPERADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "98f0d7f8-0313-4a26-8380-fa148658dc69",
+                            Name = "Administrator",
+                            NormalizedName = "ADMINISTRATOR"
+                        },
+                        new
+                        {
+                            Id = "22b6ec8b-dbc6-4f24-9444-0f201e323201",
+                            Name = "Seller",
+                            NormalizedName = "SELLER"
+                        },
+                        new
+                        {
+                            Id = "026d86c0-a803-4237-950d-7f197c6351b3",
+                            Name = "Visitor",
+                            NormalizedName = "VISITOR"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

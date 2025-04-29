@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Presistance.Context;
 
@@ -11,9 +12,11 @@ using Presistance.Context;
 namespace Presistance.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250429093125_intiLoad")]
+    partial class intiLoad
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -923,32 +926,6 @@ namespace Presistance.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "51825ff7-52b2-40bb-975f-d501997fd4ca",
-                            Name = "SuperAdministrator",
-                            NormalizedName = "SUPERADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "98f0d7f8-0313-4a26-8380-fa148658dc69",
-                            Name = "Administrator",
-                            NormalizedName = "ADMINISTRATOR"
-                        },
-                        new
-                        {
-                            Id = "22b6ec8b-dbc6-4f24-9444-0f201e323201",
-                            Name = "Seller",
-                            NormalizedName = "SELLER"
-                        },
-                        new
-                        {
-                            Id = "026d86c0-a803-4237-950d-7f197c6351b3",
-                            Name = "Visitor",
-                            NormalizedName = "VISITOR"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
