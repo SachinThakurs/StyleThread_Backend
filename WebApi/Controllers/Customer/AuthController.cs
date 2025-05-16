@@ -4,6 +4,7 @@
 using Application.DTO;
 using Application.Features.Command;
 using Application.Features.Command.GenericCommands;
+using Application.Features.Handlers.AuthHandler;
 using Application.Features.Queries;
 using Domain.Entities;
 using MediatR;
@@ -64,6 +65,20 @@ namespace WebApi.Controllers.Product
         {
             return Ok(await _mediator.Send(customerId, cancellationToken));
         }
+        [HttpPost("confirm-email")]
+        public async Task<IActionResult> ConfirmEmail(ConfirmEmailCommand command) =>
+        Ok(await _mediator.Send(command));
 
+        [HttpPost("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordCommand command) =>
+            Ok(await _mediator.Send(command));
+
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command) =>
+            Ok(await _mediator.Send(command));
+
+        [HttpPost("resend-confirmation")]
+        public async Task<IActionResult> ResendConfirmation(ResendConfirmationEmailCommand command) =>
+            Ok(await _mediator.Send(command));
     }
 }

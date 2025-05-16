@@ -2,24 +2,37 @@
 using Application.Interfaces.IRepository;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
 using static Application.DTO.Auth;
 
-namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Persistence'
+namespace Persistence.Repository
 {
-    public class UserService(UserManager<Customer> _userManager, SignInManager<Customer> _signInManager) : IUserService 
+    public class UserService : IUserService
     {
+        private readonly UserManager<Customer> _userManager;
+        private readonly SignInManager<Customer> _signInManager;
+
+        public UserService(UserManager<Customer> userManager, SignInManager<Customer> signInManager)
+        {
+            _userManager = userManager;
+            _signInManager = signInManager;
+        }
 
         public async Task<IdentityResult> Register(Customer registerRequest, string password)
         {
-            IdentityResult? result = await _userManager.CreateAsync(registerRequest, password);
+            var result = await _userManager.CreateAsync(registerRequest, password);
+
             if (result.Succeeded)
             {
+                // Assign VISITOR role
                 await _userManager.AddToRoleAsync(registerRequest, "ADMINISTRATOR");
+
+                SendConfirmationEmailAsync(registerRequest, "http://localhost:5176/");
+                // Send confirmation email logic can be triggered here or externally
             }
 
             return result;
@@ -27,45 +40,79 @@ namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Pe
 
         public async Task<GenericResponse<string>> Login(LoginRequestDto loginRequest)
         {
-            Customer? user = await _userManager.FindByEmailAsync(loginRequest.Email);
-            if (user != null)
+            try
             {
-                SignInResult varifyUser = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, false);
-                if (varifyUser.Succeeded)
+                var user = await _userManager.FindByEmailAsync(loginRequest.Email);
+                if (user != null)
                 {
-                    return new GenericResponse<string> { Content = await GenerateJwtTokenAsync(user), Success = true, Message = "Login successful." };
+                    if (!await _userManager.IsEmailConfirmedAsync(user))
+                    {
+                        return new GenericResponse<string>
+                        {
+                            Content = "Error",
+                            Success = false,
+                            Message = "Please confirm your email first."
+                        };
+                    }
+
+                    var result = await _signInManager.CheckPasswordSignInAsync(user, loginRequest.Password, false);
+                    if (result.Succeeded)
+                    {
+                        return new GenericResponse<string>
+                        {
+                            Content = await GenerateJwtTokenAsync(user),
+                            Success = true,
+                            Message = "Login successful."
+                        };
+                    }
+
+                    return new GenericResponse<string>
+                    {
+                        Content = "Error",
+                        Success = false,
+                        Message = "Please enter a valid password."
+                    };
                 }
-                return new GenericResponse<string> { Content = "Error", Success = false, Message = "Please Enter the Valid Password" };
+
+                return new GenericResponse<string>
+                {
+                    Content = "Error",
+                    Success = false,
+                    Message = "Please enter valid credentials."
+                };
             }
-            return new GenericResponse<string> { Content = "Error", Success = false, Message = "Please Enter the Valid Credentials" };
+            catch (Exception ex)
+            {
+
+                throw;
+            }
+            
         }
+
         private async Task<string> GenerateJwtTokenAsync(Customer user)
         {
-
-            List<Claim>? claims = new List<Claim>
+            var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.Email),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim("userId", user.Id.ToString())
             };
-            IList<string> roles = await _userManager.GetRolesAsync(user);
 
-            if (roles.Any())
-            {
-                claims.AddRange(roles.Select(role => new Claim("role", role)));
-            }
-            SymmetricSecurityKey? key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("THISISMYJSONWEBTOKENSOITSMYCHOICE"));
-            SigningCredentials? creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+            var roles = await _userManager.GetRolesAsync(user);
+            claims.AddRange(roles.Select(role => new Claim("role", role)));
 
-            JwtSecurityToken? token = new JwtSecurityToken(
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("THISISMYJSONWEBTOKENSOITSMYCHOICE"));
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var token = new JwtSecurityToken(
                 issuer: "SACHIN",
-                audience: null, // Customize this if you have an audience
+                audience: null,
                 claims: claims,
-                expires: DateTime.Now.AddHours(24), // Token expiration
+                expires: DateTime.UtcNow.AddHours(24),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
-
 
         public async Task<string> DeleteUser(string userId)
         {
@@ -75,12 +122,13 @@ namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Pe
                 var result = await _userManager.DeleteAsync(user);
                 return result.Succeeded ? "Account deleted successfully." : "Error while deleting the account.";
             }
+
             return "User not found.";
         }
 
         public async Task<string> UpdateUser(Customer updateUserRequest)
         {
-            var user = await _userManager.FindByIdAsync(updateUserRequest.Id);
+            var user = await _userManager.FindByIdAsync(updateUserRequest.Id.ToString());
             if (user != null)
             {
                 user.FirstName = updateUserRequest.FirstName;
@@ -90,7 +138,76 @@ namespace Persistence.Repository // Corrected spelling from 'Presistance' to 'Pe
                 var result = await _userManager.UpdateAsync(user);
                 return result.Succeeded ? "Account information updated successfully." : "Error while updating account data.";
             }
+
             return "User not found.";
+        }
+
+        public async Task<GenericResponse<string>> SendConfirmationEmailAsync(Customer user, string appBaseUrl)
+        {
+            var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var confirmationLink = $"{appBaseUrl}/confirm-email?userId={user.Id}&token={encodedToken}";
+
+            // TODO: Send confirmationLink via email
+
+            return new GenericResponse<string>
+            {
+                Success = true,
+                Message = "Confirmation email sent.",
+                Content = confirmationLink
+            };
+        }
+
+        public async Task<GenericResponse<string>> ConfirmEmailAsync(int userId, string encodedToken)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return new GenericResponse<string> { Success = false, Message = "User not found." };
+
+            var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(encodedToken));
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+
+            return new GenericResponse<string>
+            {
+                Success = result.Succeeded,
+                Message = result.Succeeded ? "Email confirmed successfully." : "Email confirmation failed."
+            };
+        }
+
+        public async Task<GenericResponse<string>> SendPasswordResetEmailAsync(string email, string appBaseUrl)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return new GenericResponse<string> { Success = false, Message = "User not found." };
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+            var resetLink = $"{appBaseUrl}/reset-password?userId={user.Id}&token={encodedToken}";
+
+            // TODO: Send resetLink via email
+
+            return new GenericResponse<string>
+            {
+                Success = true,
+                Message = "Password reset email sent.",
+                Content = resetLink
+            };
+        }
+
+        public async Task<GenericResponse<string>> ResetPasswordAsync(int userId, string encodedToken, string newPassword)
+        {
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+            if (user == null)
+                return new GenericResponse<string> { Success = false, Message = "User not found." };
+
+            var token = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(encodedToken));
+            var result = await _userManager.ResetPasswordAsync(user, token, newPassword);
+
+            return new GenericResponse<string>
+            {
+                Success = result.Succeeded,
+                Message = result.Succeeded ? "Password reset successful." : "Password reset failed."
+            };
         }
     }
 }
