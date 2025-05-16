@@ -16,5 +16,11 @@ namespace Application.Interfaces.IRepository
         Task<GenericResponse<string>> Login(LoginRequestDto loginRequest);
         Task<string> DeleteUser(string userId);
         Task<string> UpdateUser(Customer updateUserRequest);
+        Task<GenericResponse<string>> SendConfirmationEmailAsync(Customer user, string appBaseUrl);
+        Task<GenericResponse<string>> ConfirmEmailAsync(int userId, string encodedToken);
+
+        Task<GenericResponse<string>> SendPasswordResetEmailAsync(string email, string appBaseUrl);
+        Task<GenericResponse<string>> ResetPasswordAsync(int userId, string encodedToken, string newPassword);
+
     }
 }

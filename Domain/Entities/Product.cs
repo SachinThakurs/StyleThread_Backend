@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class Customer : IdentityUser
+    public class Customer : IdentityUser<int>
     {
         public required string FirstName { get; set; }
         public string? LastName { get; set; }

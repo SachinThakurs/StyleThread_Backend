@@ -21,5 +21,6 @@ namespace Application.Interfaces.IRepository
         IColorRepository colorRepository { get; }
         ISizeRepository sizeRepository { get; }
         IProductVariantSize productVariantSize { get; }
+        ICartRepository cartRepository { get; }
     }
 }

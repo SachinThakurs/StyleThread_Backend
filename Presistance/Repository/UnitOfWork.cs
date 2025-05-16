@@ -23,6 +23,7 @@ namespace Presistance.Repository
             colorRepository = new ColorRepository(_context);
             sizeRepository = new SizeRepository(_context);
             productVariantSize = new ProductVariantSize(_context);
+            cartRepository = new CartRepository(_context);
         }
         public IBrandRepository brandRepository { get; private set; }
         public ICategoryRepository categoryRepository { get; private set; }
@@ -46,5 +47,6 @@ namespace Presistance.Repository
         public ISizeRepository sizeRepository { get; private set; }
 
         public IProductVariantSize productVariantSize { get; private set; }
+        public ICartRepository cartRepository { get; private set; }
     }
 }

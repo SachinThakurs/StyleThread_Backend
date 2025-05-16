@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Presistance.Migrations
 {
     /// <inheritdoc />
-    public partial class intiLoad : Migration
+    public partial class DatabaseUp : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -17,7 +17,10 @@ namespace Presistance.Migrations
                 name: "AspNetRoles",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -31,7 +34,8 @@ namespace Presistance.Migrations
                 name: "AspNetUsers",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     LastName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -178,7 +182,7 @@ namespace Presistance.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -199,7 +203,7 @@ namespace Presistance.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
@@ -221,7 +225,7 @@ namespace Presistance.Migrations
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -238,8 +242,8 @@ namespace Presistance.Migrations
                 name: "AspNetUserRoles",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RoleId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,7 +266,7 @@ namespace Presistance.Migrations
                 name: "AspNetUserTokens",
                 columns: table => new
                 {
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
                     LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -287,15 +291,14 @@ namespace Presistance.Migrations
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Order", x => x.OrderId);
                     table.ForeignKey(
-                        name: "FK_Order_AspNetUsers_CustomerId1",
-                        column: x => x.CustomerId1,
+                        name: "FK_Order_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -376,17 +379,17 @@ namespace Presistance.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cart", x => x.CartId);
                     table.ForeignKey(
-                        name: "FK_Cart_AspNetUsers_CustomerId1",
-                        column: x => x.CustomerId1,
+                        name: "FK_Cart_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Cart_Product_ProductId",
                         column: x => x.ProductId,
@@ -464,15 +467,14 @@ namespace Presistance.Migrations
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Rating = table.Column<int>(type: "int", nullable: false),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ReviewDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Review", x => x.ReviewId);
                     table.ForeignKey(
-                        name: "FK_Review_AspNetUsers_CustomerId1",
-                        column: x => x.CustomerId1,
+                        name: "FK_Review_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -491,15 +493,14 @@ namespace Presistance.Migrations
                     WishlistId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CustomerId = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    CustomerId1 = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    ProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Wishlist", x => x.WishlistId);
                     table.ForeignKey(
-                        name: "FK_Wishlist_AspNetUsers_CustomerId1",
-                        column: x => x.CustomerId1,
+                        name: "FK_Wishlist_AspNetUsers_CustomerId",
+                        column: x => x.CustomerId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -527,6 +528,17 @@ namespace Presistance.Migrations
                         principalTable: "ProductVariants",
                         principalColumn: "ProductVariantId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "AspNetRoles",
+                columns: new[] { "Id", "ConcurrencyStamp", "CreatedAt", "Description", "Name", "NormalizedName" },
+                values: new object[,]
+                {
+                    { 1, null, new DateTime(2025, 5, 16, 9, 15, 50, 579, DateTimeKind.Utc).AddTicks(6475), null, "SuperAdministrator", "SUPERADMINISTRATOR" },
+                    { 2, null, new DateTime(2025, 5, 16, 9, 15, 50, 579, DateTimeKind.Utc).AddTicks(6477), null, "Administrator", "ADMINISTRATOR" },
+                    { 3, null, new DateTime(2025, 5, 16, 9, 15, 50, 579, DateTimeKind.Utc).AddTicks(6478), null, "Seller", "SELLER" },
+                    { 4, null, new DateTime(2025, 5, 16, 9, 15, 50, 579, DateTimeKind.Utc).AddTicks(6479), null, "Visitor", "VISITOR" }
                 });
 
             migrationBuilder.InsertData(
@@ -696,9 +708,9 @@ namespace Presistance.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Cart_CustomerId1",
+                name: "IX_Cart_CustomerId",
                 table: "Cart",
-                column: "CustomerId1");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cart_ProductId",
@@ -706,9 +718,9 @@ namespace Presistance.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Order_CustomerId1",
+                name: "IX_Order_CustomerId",
                 table: "Order",
-                column: "CustomerId1");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_OrderItem_OrderId",
@@ -766,9 +778,9 @@ namespace Presistance.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Review_CustomerId1",
+                name: "IX_Review_CustomerId",
                 table: "Review",
-                column: "CustomerId1");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Review_ProductId",
@@ -776,9 +788,9 @@ namespace Presistance.Migrations
                 column: "ProductId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Wishlist_CustomerId1",
+                name: "IX_Wishlist_CustomerId",
                 table: "Wishlist",
-                column: "CustomerId1");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Wishlist_ProductId",

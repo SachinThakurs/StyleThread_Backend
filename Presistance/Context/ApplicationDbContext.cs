@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Presistance.Context
 {
-    public class ApplicationDbContext : IdentityDbContext<Customer>, IApplicationDbcontext
+    public class ApplicationDbContext : IdentityDbContext<Customer, Role, int>, IApplicationDbcontext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
