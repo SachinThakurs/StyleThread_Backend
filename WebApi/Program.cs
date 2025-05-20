@@ -3,7 +3,7 @@ using InfraStructure;
 using Presistance;
 using Application;
 using Microsoft.OpenApi.Models;
-using Application.MiddleWare;
+using Presistance.Middlewares;
 
 namespace WebApi
 {
@@ -64,11 +64,13 @@ namespace WebApi
 
             app.UseHttpsRedirection();
 
-            app.UseMiddleware<CustomAuthorizationMiddleware>();
+            app.UseMiddleware<ExceptionHandlingMiddleware>(); // Should wrap everything to catch exceptions
 
-            app.UseAuthentication();
+            app.UseAuthentication(); // Must come before Authorization
 
-            app.UseAuthorization();
+            app.UseAuthorization();  // Required before endpoint execution
+
+            app.UseMiddleware<CustomAuthorizationMiddleware>(); // Now it can catch 401s properly
 
             app.UseCors(options =>
             {

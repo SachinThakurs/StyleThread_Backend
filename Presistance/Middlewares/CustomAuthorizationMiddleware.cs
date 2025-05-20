@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.MiddleWare
+namespace Presistance.Middlewares
 {
     public class CustomAuthorizationMiddleware(RequestDelegate _next)
     {
@@ -25,5 +25,4 @@ namespace Application.MiddleWare
             }
         }
     }
-
 }

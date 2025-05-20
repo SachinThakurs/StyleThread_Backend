@@ -1,26 +1,25 @@
 ﻿using Application.DTO;
+using Application.Features.Handlers.AuthHandler;
 using Application.Interfaces.IRepository;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.IdentityModel.Tokens;
+using Presistance.Repository;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Threading;
 using static Application.DTO.Auth;
 
 namespace Persistence.Repository
 {
-    public class UserService : IUserService
+    public class UserService(UserManager<Customer> userManager, SignInManager<Customer> signInManager, IUnitOfWork unitOfWork) : IUserService
     {
-        private readonly UserManager<Customer> _userManager;
-        private readonly SignInManager<Customer> _signInManager;
-
-        public UserService(UserManager<Customer> userManager, SignInManager<Customer> signInManager)
-        {
-            _userManager = userManager;
-            _signInManager = signInManager;
-        }
+        private readonly UserManager<Customer> _userManager = userManager;
+        private readonly SignInManager<Customer> _signInManager = signInManager;
+        private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
         public async Task<IdentityResult> Register(Customer registerRequest, string password)
         {
@@ -29,10 +28,19 @@ namespace Persistence.Repository
             if (result.Succeeded)
             {
                 // Assign VISITOR role
-                await _userManager.AddToRoleAsync(registerRequest, "ADMINISTRATOR");
+                await _userManager.AddToRoleAsync(registerRequest, "VISITOR");
 
-                SendConfirmationEmailAsync(registerRequest, "http://localhost:5176/");
-                // Send confirmation email logic can be triggered here or externally
+                // Generate OTP
+                var otp = new Random().Next(100000, 999999).ToString();
+
+                // Save OTP
+                await _unitOfWork.emailOtpRepository.SaveOtpAsync(registerRequest.Id, otp);
+
+                // Send via email
+                await _unitOfWork.emailOtpRepository.SendEmailAsync(registerRequest.Email, "Your OTP Code", $"Your OTP is: {otp}");
+
+                // Send via phone (e.g., using Twilio or SMS API)
+                await _unitOfWork.emailOtpRepository.SendSmsAsync(registerRequest.PhoneNumber, $"Your OTP is: {otp}");
             }
 
             return result;
@@ -209,5 +217,29 @@ namespace Persistence.Repository
                 Message = result.Succeeded ? "Password reset successful." : "Password reset failed."
             };
         }
+        public async Task<GenericResponse<string>> ConfirmOtpAsync(ConfirmEmailCommand request, CancellationToken cancellationToken)
+        {
+            var user = await _userManager.FindByEmailAsync(request.Email);
+            if (user == null)
+                return new GenericResponse<string> { Success = false, Message = "User not found." };
+
+            var emailOtp = await _unitOfWork.emailOtpRepository.GetLatestValidOtpAsync(user.Id, request.Otp, cancellationToken);
+
+            if (emailOtp == null || emailOtp.CreatedAt.AddMinutes(5) < DateTime.UtcNow)
+            {
+                return new GenericResponse<string> { Success = false, Message = "OTP is invalid or expired." };
+            }
+
+            if (user.EmailConfirmed)
+            {
+                return new GenericResponse<string> { Success = false, Message = "Email is already confirmed." };
+            }
+
+            user.EmailConfirmed = true;
+            await _userManager.UpdateAsync(user);
+
+            return new GenericResponse<string> { Success = true, Message = "Email confirmed successfully." };
+        }
+
     }
 }

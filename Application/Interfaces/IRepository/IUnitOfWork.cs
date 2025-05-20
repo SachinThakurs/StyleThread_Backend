@@ -22,5 +22,6 @@ namespace Application.Interfaces.IRepository
         ISizeRepository sizeRepository { get; }
         IProductVariantSize productVariantSize { get; }
         ICartRepository cartRepository { get; }
+        IEmailOtpRepository emailOtpRepository{get;}
     }
 }

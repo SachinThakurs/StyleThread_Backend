@@ -65,19 +65,28 @@ namespace WebApi.Controllers.Product
         {
             return Ok(await _mediator.Send(customerId, cancellationToken));
         }
-        [HttpPost("confirm-email")]
-        public async Task<IActionResult> ConfirmEmail(ConfirmEmailCommand command) =>
-        Ok(await _mediator.Send(command));
+        //[HttpPost("ConfirmEmail")]
+        //public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailCommand command) => Ok(await _mediator.Send(command));
+        [HttpPost("ConfirmEmail")]
+        public async Task<IActionResult> ConfirmEmail([FromBody] ConfirmEmailCommand command)
+        {
+            if (command is null)
+                return BadRequest("Command is null");
 
-        [HttpPost("forgot-password")]
+            return Ok(await _mediator.Send(command));
+        }
+
+
+
+        [HttpPost("ForgotPassword")]
         public async Task<IActionResult> ForgotPassword(ForgotPasswordCommand command) =>
             Ok(await _mediator.Send(command));
 
-        [HttpPost("reset-password")]
+        [HttpPost("ResetPassword")]
         public async Task<IActionResult> ResetPassword(ResetPasswordCommand command) =>
             Ok(await _mediator.Send(command));
 
-        [HttpPost("resend-confirmation")]
+        [HttpPost("ResendOtp")]
         public async Task<IActionResult> ResendConfirmation(ResendConfirmationEmailCommand command) =>
             Ok(await _mediator.Send(command));
     }

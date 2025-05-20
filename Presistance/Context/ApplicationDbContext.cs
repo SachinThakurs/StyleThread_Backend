@@ -32,6 +32,7 @@ namespace Presistance.Context
         public DbSet<Sleeve> Sleeves { get; set; }
         public DbSet<NeckType> NeckTypes { get; set; }
         public DbSet<FabricCare> FabricCares { get; set; }
+        public DbSet<EmailOtp> EmailOtps { get; set; }
 
         public async Task<int> SaveChangesAsync(CancellationToken cancellation)
         {

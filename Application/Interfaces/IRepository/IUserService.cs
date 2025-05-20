@@ -1,4 +1,5 @@
 ﻿using Application.DTO;
+using Application.Features.Handlers.AuthHandler;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -21,6 +22,7 @@ namespace Application.Interfaces.IRepository
 
         Task<GenericResponse<string>> SendPasswordResetEmailAsync(string email, string appBaseUrl);
         Task<GenericResponse<string>> ResetPasswordAsync(int userId, string encodedToken, string newPassword);
+        Task<GenericResponse<string>> ConfirmOtpAsync(ConfirmEmailCommand request, CancellationToken cancellationToken);
 
     }
 }
