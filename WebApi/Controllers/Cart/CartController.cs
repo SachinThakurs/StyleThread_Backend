@@ -23,12 +23,12 @@ namespace WebApi.Controllers.Cart
             return Ok(await _mediator.Send(CartData, cancellationToken));
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateCart(GenericUpdateCommand<CartDto, GenericResponse<string>> UpdateCartData, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateCart(GenericUpdateCommand<CartDto, GenericResponse<CartDto>> UpdateCartData, CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(UpdateCartData, cancellationToken));
         }
-        [HttpDelete("{cartId}")]
-        public async Task<IActionResult> ClearCart(int cartId, CancellationToken cancellationToken)
+        [HttpDelete]
+        public async Task<IActionResult> ClearCart([FromQuery] int cartId, CancellationToken cancellationToken)
         {
             var command = new GenericDeleteByIdCommand<int, GenericResponse<string>>(cartId);
             var result = await _mediator.Send(command, cancellationToken);
