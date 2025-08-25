@@ -40,18 +40,6 @@ namespace Presistance
                  };
              });
 
-            //services.AddIdentity<Customer, Role>(options =>
-            //{
-            //    //Configure identity options here
-            //    options.Password.RequireDigit = true;
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequireNonAlphanumeric = false;
-            //    options.SignIn.RequireConfirmedAccount = true;
-            //})
-            //.AddRoles<IdentityRole>()
-            //.AddEntityFrameworkStores<ApplicationDbContext>()
-            //.AddSignInManager<SignInManager<Customer>>()
-            //.AddDefaultTokenProviders();
             services.AddIdentity<Customer, Role>(options =>
             {
                 options.Password.RequireDigit = true;
@@ -73,30 +61,6 @@ namespace Presistance
             {
                 opt.TokenLifespan = TimeSpan.FromHours(2);
             });
-
-
-            //services.Configure<IdentityOptions>(options =>
-            //{
-            //    options.SignIn.RequireConfirmedAccount = false;
-
-            //    // Password settings.
-            //    options.Password.RequireDigit = true;
-            //    options.Password.RequireLowercase = true;
-            //    options.Password.RequireNonAlphanumeric = true;
-            //    options.Password.RequireUppercase = true;
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequiredUniqueChars = 1;
-
-            //    // Lockout settings.
-            //    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-            //    options.Lockout.MaxFailedAccessAttempts = 5;
-            //    options.Lockout.AllowedForNewUsers = false;
-
-            //    // User settings.
-            //    options.User.AllowedUserNameCharacters =
-            //    "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-            //    options.User.RequireUniqueEmail = false;
-            //});
 
         }
     }

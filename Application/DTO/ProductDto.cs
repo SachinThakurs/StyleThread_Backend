@@ -117,7 +117,7 @@ namespace Application.DTO
     public class CartDto
     {
         public int CartId { get; set; }
-        public string CustomerId { get; set; }  // Assuming CustomerId is a string
+        public int CustomerId { get; set; }  // Assuming CustomerId is a string
         public int ProductId { get; set; }
         public int Quantity { get; set; }
     }

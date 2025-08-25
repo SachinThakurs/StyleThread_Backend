@@ -11,17 +11,6 @@ public class MappingProfile : Profile
         CreateMap<ProductDto, Product>()
             .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.ProductVariants));
 
-        // Map ProductVariantDto to ProductVariant
-        //CreateMap<ProductVariantDto, ProductVariant>()
-        //    //.ForMember(dest => dest.ProductVariantSizes, opt => opt.MapFrom(src => src.ProductVariantSizes))
-        //    .ForMember(dest => dest.ProductVariantSizes, opt => opt.MapFrom(src => src.ProductVariantSizes))
-        //    .ForMember(dest => dest.Image, opt => opt.MapFrom(src => src.Image)); // No conversion here
-
-        // Map ProductVariantSizeDto to ProductVariantSize
-        //CreateMap<ProductVariantSizeDto, ProductVariantSize>()
-        //    .ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.SizeId))
-        //    .ForMember(dest => dest.ProductVariantId, opt => opt.MapFrom(src => src.ProductVariantId));
-
         // Map Product to ProductDto
         CreateMap<Product, ProductDto>()
             .ForMember(dest => dest.ProductVariants, opt => opt.MapFrom(src => src.ProductVariants));
@@ -50,11 +39,6 @@ public class MappingProfile : Profile
         // Map ProductVariantDto to ProductVariant
         CreateMap<ProductVariantDto, ProductVariant>().ReverseMap();
 
-        // Map ProductVariantSizeDto to ProductVariantSize
-        //CreateMap<ProductVariantSizeDto, ProductVariantSize>()
-        //    .ForMember(dest => dest.Size, opt => opt.MapFrom(src => src.Size))  // Correct mapping for Size
-        //    .ReverseMap();
-
         // Map ProductVariantSizeDto to ProductVariantSize (only for return)
         CreateMap<ProductVariantSizeDto, ProductVariantSize>()
             .ForMember(dest => dest.SizeId, opt => opt.MapFrom(src => src.SizeId))
@@ -68,6 +52,8 @@ public class MappingProfile : Profile
         // Map SizeDto to Size and vice versa
         CreateMap<SizeDto, Size>().ReverseMap();
 
+        // Map SizeDto to Size and vice versa
+        CreateMap<CartDto, Cart>().ReverseMap();
 
     }
 }

@@ -13,9 +13,9 @@ namespace WebApi.Controllers.Cart
     public class CartController(IMediator _mediator) : ControllerBase
     {
         [HttpGet]
-        public async Task<IActionResult> GetCartDataById([FromQuery] string customerId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetCartDataById([FromQuery] int customerId, CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(new GenericFindByIdCommand<string, GenericResponse<CartDto>>(customerId), cancellationToken));
+            return Ok(await _mediator.Send(new GenericFindByIdCommand<int, GenericResponse<List<CartDto>>>(customerId), cancellationToken));
         }
         [HttpPost]
         public async Task<IActionResult> AddToCart([FromBody] GenericCreateCommand<CartDto, GenericResponse<CartDto>> CartData, CancellationToken cancellationToken)
@@ -27,10 +27,12 @@ namespace WebApi.Controllers.Cart
         {
             return Ok(await _mediator.Send(UpdateCartData, cancellationToken));
         }
-        [HttpDelete("{BrandId}")]
-        public async Task<IActionResult> ClearCart(GenericDeleteCommand<CartDto, GenericResponse<string>> BrandId, CancellationToken cancellationToken)
+        [HttpDelete("{cartId}")]
+        public async Task<IActionResult> ClearCart(int cartId, CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(BrandId, cancellationToken));
+            var command = new GenericDeleteByIdCommand<int, GenericResponse<string>>(cartId);
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
         }
     }
 }

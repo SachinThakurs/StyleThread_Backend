@@ -11,27 +11,26 @@ using static Application.DTO.Auth;
 namespace Application.Features.Handlers.CartHandler
 {
     internal class GetByIdHandler(IUnitOfWork _unitOfWork)
-        : IRequestHandler<GenericFindByIdCommand<string, GenericResponse<CartDto>>, GenericResponse<CartDto>>
+        : IRequestHandler<GenericFindByIdCommand<int, GenericResponse<List<CartDto>>>, GenericResponse<List<CartDto>>>
     {
-        public async Task<GenericResponse<CartDto>> Handle(GenericFindByIdCommand<string, GenericResponse<CartDto>> request, CancellationToken cancellationToken)
+        public async Task<GenericResponse<List<CartDto>>> Handle(GenericFindByIdCommand<int, GenericResponse<List<CartDto>>> request, CancellationToken cancellationToken)
         {
             try
             {
                 if (request?.Entity != null)
                 {
-                    var cart = await _unitOfWork.cartRepository.GetByIdAsync(request.Entity, cancellationToken);
-                    if (cart != null)
+                    List<Cart> cartList = await _unitOfWork.cartRepository.GetCartByCustomerIdAsync(request.Entity, cancellationToken);
+                    if (cartList.Any() == true)
                     {
-                        var dto = new CartDto
+                        var dto = cartList.Select ( cart => new CartDto
                         {
                             CartId = cart.CartId,
-                            CustomerId = cart.CustomerId.ToString(),
+                            CustomerId = cart.CustomerId,
                             ProductId = cart.ProductId,
                             Quantity = cart.Quantity,
-                            // Map other properties as needed
-                        };
+                        }).ToList();
 
-                        return new GenericResponse<CartDto>
+                        return new GenericResponse<List<CartDto>>
                         {
                             Content = dto,
                             Error = null,
@@ -40,16 +39,16 @@ namespace Application.Features.Handlers.CartHandler
                         };
                     }
 
-                    return new GenericResponse<CartDto>
+                    return new GenericResponse<List<CartDto>>
                     {
                         Content = null,
                         Error = "Not Found",
                         Message = $"No cart found with ID {request.Entity}",
-                        Success = false
+                        Success = true
                     };
                 }
 
-                return new GenericResponse<CartDto>
+                return new GenericResponse<List<CartDto>>
                 {
                     Content = null,
                     Error = "Invalid Data",
@@ -59,7 +58,7 @@ namespace Application.Features.Handlers.CartHandler
             }
             catch (Exception ex)
             {
-                return new GenericResponse<CartDto>
+                return new GenericResponse<List<CartDto>>
                 {
                     Content = null,
                     Error = ex.InnerException?.Message ?? ex.Message,
