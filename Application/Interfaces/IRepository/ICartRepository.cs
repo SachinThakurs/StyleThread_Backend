@@ -9,6 +9,6 @@ namespace Application.Interfaces.IRepository
 {
     public interface ICartRepository : IRepository<Cart>
     {
-        //Task<Cart?> GetCartByCustomerIdAsync(string customerId, CancellationToken cancellationToken);
+        Task<List<Cart>> GetCartByCustomerIdAsync(int customerId, CancellationToken cancellationToken);
     }
 }

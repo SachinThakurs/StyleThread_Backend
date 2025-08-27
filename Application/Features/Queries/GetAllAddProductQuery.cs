@@ -5,16 +5,18 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using static Application.DTO.Auth;
 
 namespace Application.Features.Queries
 {
-    public class GetAllAddProductQuery : IRequest<CompositeResponse>
+    public class GetAllAddProductQuery : IRequest<GenericResponse<CompositeResponse>>
     {
-        internal class GetAllAddProductQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetAllAddProductQuery, CompositeResponse>
+        internal class GetAllAddProductQueryHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GetAllAddProductQuery, GenericResponse<CompositeResponse>>
         {
-            public async Task<CompositeResponse> Handle(GetAllAddProductQuery request, CancellationToken cancellationToken)
+            public async Task<GenericResponse<CompositeResponse>> Handle(GetAllAddProductQuery request, CancellationToken cancellationToken)
             {
                 IEnumerable<Domain.Entities.Category> categories = await _unitOfWork.categoryRepository.GetAllAsync(cancellationToken);
                 IEnumerable<Domain.Entities.Brand> brands = await _unitOfWork.brandRepository.GetAllAsync(cancellationToken);
@@ -39,7 +41,15 @@ namespace Application.Features.Queries
                     Sizes = sizes.ToList()
                 };
 
-                return compositeResponse;
+                var response = new GenericResponse<CompositeResponse>
+                {
+                    Message = "Data fetched successfully",
+                    Error = null,
+                    Content = compositeResponse,
+                    Success = true
+                };
+
+                return response;
             }
         }
     }

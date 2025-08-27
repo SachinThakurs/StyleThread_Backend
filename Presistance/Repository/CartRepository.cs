@@ -13,10 +13,9 @@ namespace Presistance.Repository
 {
     internal class CartRepository(ApplicationDbContext _dbContext) : Repository<Cart>(_dbContext), ICartRepository
     {
-        //public async Task<Cart?> GetCartByCustomerIdAsync(string customerId, CancellationToken cancellationToken)
-        //{
-        //    return await _dbContext.Cart
-        //        .FirstOrDefaultAsync(c => c.CustomerId == customerId, cancellationToken);
-        //}
+        public async Task<List<Cart>> GetCartByCustomerIdAsync(int customerId, CancellationToken cancellationToken)
+        {
+            return _dbContext.Cart.Where(x=>x.CustomerId == customerId).ToList();
+        }
     }
 }

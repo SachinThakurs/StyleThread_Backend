@@ -25,8 +25,26 @@ namespace Application.Features.Handlers.CartHandler
                     Cart cart = mapper.Map<Cart>(request.Entity);
                     if (cart != null)
                     {
-                        await _unitOfWork.cartRepository.InsertAsync(cart);
+                        var existingCartItems = await _unitOfWork.cartRepository.GetCartByCustomerIdAsync(cart.CustomerId, cancellationToken);
+
+                        var existingProduct = existingCartItems
+                            .FirstOrDefault(x => x.ProductId == cart.ProductId);
+
+                        if(existingProduct?.Quantity == 5)
+                            return new GenericResponse<CartDto> { Content = null, Error = "Exceeding quantity", Message = "Exceed quantity of same product", Success = false };
+
+                        if (existingProduct != null)
+                        {
+                            // Update the tracked entity directly
+                            existingProduct.Quantity += cart.Quantity;
+
+                            await _unitOfWork.cartRepository.UpdateAsync(existingProduct);
+                        }
+                        else
+                            await _unitOfWork.cartRepository.InsertAsync(cart);
+
                         await _unitOfWork.cartRepository.SaveAsync(cancellationToken);
+
                         return new GenericResponse<CartDto> { Content = request.Entity, Error = "null", Message = "Item added successfully", Success = true };
                     }
                     return new GenericResponse<CartDto> { Content = null, Error = "Error occured", Message = "Error Occured while saving the data", Success = false };

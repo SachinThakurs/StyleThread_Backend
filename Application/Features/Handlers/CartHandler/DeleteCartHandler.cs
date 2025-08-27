@@ -4,40 +4,50 @@ using Application.Interfaces.IRepository;
 using Domain.Entities;
 using MediatR;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using static Application.DTO.Auth;
 
 namespace Application.Features.Handlers.CartHandler
 {
-    internal class DeleteCartHandler(IUnitOfWork _unitOfWork) : IRequestHandler<GenericDeleteCommand<CartDto, GenericResponse<string>>, GenericResponse<string>>
+    internal class DeleteCartHandler(IUnitOfWork _unitOfWork)
+        : IRequestHandler<GenericDeleteByIdCommand<int, GenericResponse<string>>, GenericResponse<string>>
     {
-        public async Task<GenericResponse<string>> Handle(GenericDeleteCommand<CartDto, GenericResponse<string>> request, CancellationToken cancellationToken)
+        public async Task<GenericResponse<string>> Handle(GenericDeleteByIdCommand<int, GenericResponse<string>> request, CancellationToken cancellationToken)
         {
             try
             {
-                if (request?.Entity != null)
+                var cartItem = await _unitOfWork.cartRepository.GetByIdAsync(request.Id, cancellationToken);
+
+                if (cartItem is null)
                 {
-                    Cart findCartItemForDelete = await _unitOfWork.cartRepository.GetByIdAsync(request.Entity.CartId, cancellationToken);
-                    if (findCartItemForDelete != null)
+                    return new GenericResponse<string>
                     {
-                        await _unitOfWork.cartRepository.DeleteAsync(request.Entity.CartId, cancellationToken);
-                        await _unitOfWork.cartRepository.SaveAsync(cancellationToken);
-                        return new GenericResponse<string> { Content = null, Error = null, Message = "Cart item deleted successfully.", Success = true };
-                    }
-                    return new GenericResponse<string> { Content = $"No Record found", Error = "Error while finding the record", Message = $"No Record found with the given Brand Id {request.Entity.CartId}", Success = false };
+                        Content = null,
+                        Error = "Record not found",
+                        Message = $"No cart item found with the given Id {request.Id}",
+                        Success = false
+                    };
                 }
-                return new GenericResponse<string> { Content = null, Error = "Enter valid data", Message = "Please enter the valid data", Success = false };
+
+                await _unitOfWork.cartRepository.DeleteAsync(request.Id, cancellationToken);
+                await _unitOfWork.cartRepository.SaveAsync(cancellationToken);
+
+                return new GenericResponse<string>
+                {
+                    Content = null,
+                    Error = null,
+                    Message = "Cart item deleted successfully.",
+                    Success = true
+                };
             }
             catch (Exception ex)
             {
                 return new GenericResponse<string>
                 {
                     Content = null,
-                    Error = ex?.InnerException?.Message,
-                    Message = ex?.Message,
+                    Error = ex.InnerException?.Message ?? ex.Message,
+                    Message = "An error occurred while deleting the cart item.",
                     Success = false
                 };
             }
