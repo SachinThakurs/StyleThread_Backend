@@ -43,7 +43,7 @@ namespace Application.Features.Handlers.AuthHandler
                 {
                     Content = "Error",
                     Success = false,
-                    Message = $"An unexpected error occurred: {ex.Message}"
+                    Message = "Something went wrong while processing your request. Please try again later."
                 };
             }
         }

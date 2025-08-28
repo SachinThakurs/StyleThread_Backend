@@ -21,7 +21,7 @@ namespace Application.Features.Handlers.AuthHandler
             }
             catch (Exception ex)
             {
-                return new GenericResponse<string> { Success = false, Message = $"An error occurred: {ex.Message}" };
+                return new GenericResponse<string> { Success = false, Message = "Something went wrong while processing your request. Please try again later." };
             }
         }
     }
