@@ -3,6 +3,7 @@ using Application.Features.Service;
 
 //using Application.Features.Handlers.AuthHandler;
 using Application.Interfaces;
+using Application.Interfaces.IEmailService;
 using Domain.Entities;
 using FluentValidation;
 using MediatR;
@@ -22,6 +23,8 @@ namespace Application
             services.AddTransient<UserManager<Customer>>();
             services.AddSingleton<CloudinaryService>();
             services.AddSingleton<IRazorpayService, RazorPayService>();
+            services.AddScoped<IEmailService, EmailService>();
+
         }
     }
 }
